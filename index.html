@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Promo Hub</title>
+    <style>
+        /* මූලික සැකසුම් */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); min-height: 100vh; padding: 15px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Header */
+        .header { background: white; padding: 25px; border-radius: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .header h1 { color: #ec4899; font-size: 2em; margin-bottom: 5px; }
+        .header p { color: #8b5cf6; font-weight: bold; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 15px; background: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1em; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .tab-btn.active { background: #333; color: white; }
+
+        /* Content Sections */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: white; padding: 25px; border-radius: 20px; text-align: center; border: 3px solid transparent; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .card:hover { border-color: #ec4899; transform: translateY(-5px); }
+        .price { font-size: 2em; color: #ec4899; font-weight: bold; margin: 15px 0; }
+
+        /* Forms */
+        .form-card { background: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        .form-group input, .form-group select { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px; font-size: 1em; outline: none; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: #ec4899; }
+
+        /* Buttons */
+        .btn-primary { width: 100%; padding: 16px; background: linear-gradient(90deg, #ec4899, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-primary:hover { opacity: 0.9; transform: scale(1.02); }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🚀 Social Media Promo Hub</h1>
+        <p>Promote Your Pages | Earn Money Online</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('home')">🏠 Home</button>
+        <button class="tab-btn" onclick="switchTab('earn')">💵 Earn</button>
+        <button class="tab-btn" onclick="switchTab('admin')">⚙️ Admin</button>
+    </div>
+
+    <div id="homeTab" class="tab-content active">
+        <div id="packagesContainer" class="grid"></div>
+        
+        <div id="orderForm" class="form-card hidden">
+            <h2 style="color:#ec4899; margin-bottom:20px;">📝 පැකේජය ඇණවුම් කරන්න</h2>
+            <form onsubmit="sendWhatsAppOrder(event)">
+                <div class="form-group"><label>තෝරාගත් පැකේජය</label><input type="text" id="selectedPkg" readonly></div>
+                <div class="form-group"><label>ඔබේ නම</label><input type="text" id="orderName" required></div>
+                <div class="form-group"><label>WhatsApp අංකය</label><input type="tel" id="orderWa" placeholder="07XXXXXXXX" required></div>
+                <div class="form-group">
+                    <label>ගෙවීම් සිදු කරන ක්‍රමය (Payment Method)</label>
+                    <select id="orderPayment" required>
+                        <option value="">තෝරන්න (Select)</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="EzCash / mCash">EzCash / mCash</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Page හෝ Profile Link එක</label><input type="url" id="orderLink" placeholder="https://..." required></div>
+                <button type="submit" class="btn-primary">Order via WhatsApp ✅</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="earnTab" class="tab-content">
+        <div id="tasksContainer" class="grid"></div>
+        
+        <div class="form-card">
+            <h2 style="color:#8b5cf6; margin-bottom:20px;">📋 Task විස්තර එවන්න</h2>
+            <form onsubmit="sendWhatsAppTask(event)">
+                <div class="form-group"><label>Task Code එක</label><input type="text" id="taskCodeInput" required></div>
+                <div class="form-group"><label>ඔබේ නම</label><input type="text" id="workerName" required></div>
+                <div class="form-group"><label>මුදල් ලබා ගැනීමට අවශ්‍ය ක්‍රමය</label>
+                    <select id="workerPayment" required>
+                        <option value="Bank">Bank Transfer</option>
+                        <option value="EzCash">EzCash / mCash</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>ගෙවීම් තොරතුරු (අංකය හෝ ගිණුම් විස්තර)</label><input type="text" id="workerDetails" placeholder="Account No / Phone Number" required></div>
+                <button type="submit" class="btn-primary" style="background: #8b5cf6;">Submit via WhatsApp ✅</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="adminTab" class="tab-content">
+        <div id="adminLogin" class="form-card">
+            <h2>🔐 Admin Login</h2><br>
+            <div class="form-group">
+                <label>Password එක ඇතුලත් කරන්න</label>
+                <input type="password" id="passInput" placeholder="මුරපදය ගසන්න">
+            </div>
+            <button class="btn-primary" onclick="loginAdmin()">Login</button>
+        </div>
+
+        <div id="adminSettings" class="hidden">
+            <div class="form-card">
+                <h3>📦 අලුත් පැකේජයක් එක් කරන්න</h3><br>
+                <input type="number" id="admPkgReach" placeholder="Reach (10000)"><br><br>
+                <input type="number" id="admPkgPrice" placeholder="මිල (Rs.)"><br><br>
+                <button class="btn-primary" onclick="addPkg()">Add Package</button>
+            </div>
+            <div class="form-card">
+                <h3>📋 අලුත් Task එකක් එක් කරන්න</h3><br>
+                <input type="text" id="admTaskCode" placeholder="Task Code"><br><br>
+                <input type="text" id="admTaskDesc" placeholder="විස්තරය"><br><br>
+                <input type="number" id="admTaskReward" placeholder="ගෙවන මුදල"><br><br>
+                <button class="btn-primary" style="background:#8b5cf6;" onclick="addTask()">Add Task</button>
+            </div>
+            <button class="btn-primary" style="background:red;" onclick="localStorage.clear(); location.reload();">Clear All Data</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const MY_NUMBER = "94781075444";
+    const ADMIN_PASS = "Rangi1233"; // මෙන්න මුරපදය වෙනස් කළා
+
+    let packages = JSON.parse(localStorage.getItem('pkgs')) || [];
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tab + 'Tab').classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function renderUI() {
+        const pkgCont = document.getElementById('packagesContainer');
+        pkgCont.innerHTML = packages.map(p => `
+            <div class="card" onclick="selectPkg('${p.reach}')">
+                <div style="font-size:3em;">💎</div>
+                <h3>${p.reach} Reach</h3>
+                <div class="price">Rs. ${p.price}</div>
+                <button class="btn-primary">දැන් ඇණවුම් කරන්න</button>
+            </div>
+        `).join('') || "<p style='color:white;text-align:center;'>පැකේජ නොමැත.</p>";
+
+        const taskCont = document.getElementById('tasksContainer');
+        taskCont.innerHTML = tasks.map(t => `
+            <div class="card" onclick="selectTask('${t.code}')">
+                <div style="background:#f3e8ff; display:inline-block; padding:5px; border-radius:5px; color:#8b5cf6;">Code: ${t.code}</div>
+                <p style="margin:10px 0;">${t.desc}</p>
+                <div class="price" style="color:#22c55e; font-size:1.5em;">Reward: Rs. ${t.reward}</div>
+            </div>
+        `).join('') || "<p style='color:white;text-align:center;'>Tasks නොමැත.</p>";
+    }
+
+    function loginAdmin() {
+        if(document.getElementById('passInput').value === ADMIN_PASS) {
+            document.getElementById('adminLogin').classList.add('hidden');
+            document.getElementById('adminSettings').classList.remove('hidden');
+        } else { alert("වැරදි මුරපදයක්!"); }
+    }
+
+    function addPkg() {
+        const reach = document.getElementById('admPkgReach').value;
+        const price = document.getElementById('admPkgPrice').value;
+        if(reach && price) {
+            packages.push({reach, price});
+            localStorage.setItem('pkgs', JSON.stringify(packages));
+            renderUI();
+            alert("Done!");
+        }
+    }
+
+    function addTask() {
+        const code = document.getElementById('admTaskCode').value;
+        const desc = document.getElementById('admTaskDesc').value;
+        const reward = document.getElementById('admTaskReward').value;
+        if(code && desc && reward) {
+            tasks.push({code, desc, reward});
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderUI();
+            alert("Done!");
+        }
+    }
+
+    function selectPkg(reach) {
+        document.getElementById('selectedPkg').value = reach + " Reach";
+        document.getElementById('orderForm').classList.remove('hidden');
+        document.getElementById('orderForm').scrollIntoView();
+    }
+
+    function selectTask(code) {
+        document.getElementById('taskCodeInput').value = code;
+        alert("Task Code Selected!");
+    }
+
+    function sendWhatsAppOrder(e) {
+        e.preventDefault();
+        const msg = `*🆕 NEW ORDER*%0A%0A` +
+                    `📦 Pkg: ${document.getElementById('selectedPkg').value}%0A` +
+                    `👤 Name: ${document.getElementById('orderName').value}%0A` +
+                    `📱 WA: ${document.getElementById('orderWa').value}%0A` +
+                    `💰 Method: ${document.getElementById('orderPayment').value}%0A` +
+                    `🔗 Link: ${document.getElementById('orderLink').value}`;
+        window.open(`https://wa.me/${MY_NUMBER}?text=${msg}`);
+    }
+
+    function sendWhatsAppTask(e) {
+        e.preventDefault();
+        const msg = `*💰 TASK SUBMISSION*%0A%0A` +
+                    `✅ Code: ${document.getElementById('taskCodeInput').value}%0A` +
+                    `👤 Name: ${document.getElementById('workerName').value}%0A` +
+                    `💸 Pay via: ${document.getElementById('workerPayment').value}%0A` +
+                    `🏦 Details: ${document.getElementById('workerDetails').value}`;
+        window.open(`https://wa.me/${MY_NUMBER}?text=${msg}`);
+    }
+
+    renderUI();
+</script>
+</body>
+</html>
